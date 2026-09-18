@@ -1,0 +1,15 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+enum Direction { INCOMING OUTGOING }
+enum MessageStatus { RECEIVED QUEUED SENT DELIVERED FAILED READ }
+enum NotificationType { NEW_MESSAGE SYSTEM }
+model User { id String @id @default(cuid()) email String @unique passwordHash String profile Profile? settings AssistantSettings? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt conversations Conversation[] notifications Notification[] auditLogs AuditLog[] }
+model Profile { id String @id @default(cuid()) userId String @unique user User @relation(fields:[userId], references:[id], onDelete: Cascade) displayName String @default("Shadab") timezone String @default("UTC") }
+model Contact { id String @id @default(cuid()) identifier String @unique name String? createdAt DateTime @default(now()) conversations Conversation[] }
+model Conversation { id String @id @default(cuid()) userId String contactId String user User @relation(fields:[userId], references:[id], onDelete: Cascade) contact Contact @relation(fields:[contactId], references:[id]) messages Message[] updatedAt DateTime @updatedAt createdAt DateTime @default(now()) @@index([userId, updatedAt]) }
+model Message { id String @id @default(cuid()) providerMessageId String? provider String @default("simulator") conversationId String conversation Conversation @relation(fields:[conversationId], references:[id], onDelete: Cascade) senderIdentifier String content String direction Direction status MessageStatus error String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt @@unique([provider, providerMessageId]) @@index([conversationId, createdAt]) }
+model AssistantSettings { id String @id @default(cuid()) userId String @unique user User @relation(fields:[userId], references:[id], onDelete: Cascade) enabled Boolean @default(true) assistantName String @default("Shadab's Assistant") automaticReply String @db.Text notificationsEnabled Boolean @default(true) responseDelayMs Int @default(0) workingHoursEnabled Boolean @default(false) workingStart String @default("09:00") workingEnd String @default("17:00") replyOutsideWorkingHours Boolean @default(true) }
+model Notification { id String @id @default(cuid()) userId String user User @relation(fields:[userId], references:[id], onDelete: Cascade) type NotificationType title String body String readAt DateTime? createdAt DateTime @default(now()) @@index([userId, readAt]) }
+model ProviderConfiguration { id String @id @default(cuid()) userId String user User @relation(fields:[userId], references:[id], onDelete: Cascade) provider String enabled Boolean @default(false) encryptedConfig String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+model AuditLog { id String @id @default(cuid()) userId String? user User? @relation(fields:[userId], references:[id], onDelete: SetNull) action String metadata String? createdAt DateTime @default(now()) }

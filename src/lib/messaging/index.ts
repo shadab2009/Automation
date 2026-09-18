@@ -1,0 +1,4 @@
+export interface IncomingMessage { provider:string; providerMessageId:string; senderIdentifier:string; senderName?:string; content:string; raw?:unknown }
+export interface MessagingProvider { readonly name:string; sendMessage(input:{to:string;content:string}):Promise<{providerMessageId:string;status:'sent'}>; verifyWebhook?(body:string,signature:string):boolean; }
+export class SimulatorProvider implements MessagingProvider { readonly name='simulator'; async sendMessage(input:{to:string;content:string}) { return {providerMessageId:`sim-${Date.now()}-${input.to}`,status:'sent' as const}; } }
+export class OfficialProviderAdapter implements MessagingProvider { readonly name:string; constructor(name:string){this.name=name;} async sendMessage():Promise<{providerMessageId:string;status:'sent'}>{throw new Error('Configure an approved official provider adapter before sending live messages.');} }

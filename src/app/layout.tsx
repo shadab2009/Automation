@@ -1,0 +1,1 @@
+import './globals.css'; import type { ReactNode } from 'react'; export const metadata={title:'Shadab AI Personal Assistant',description:'Secure personal message assistant'}; export default function RootLayout({children}:{children:ReactNode}){return <html lang="en"><body>{children}</body></html>}

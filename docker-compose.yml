@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: assistant
+      POSTGRES_PASSWORD: assistant
+      POSTGRES_DB: assistant
+    ports: ["5432:5432"]
+    volumes: [assistant-postgres:/var/lib/postgresql/data]
+volumes:
+  assistant-postgres:

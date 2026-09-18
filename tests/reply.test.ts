@@ -1,0 +1,1 @@
+import { describe,it,expect } from 'vitest'; import { DEFAULT_REPLY } from '../src/lib/processing'; describe('assistant reply',()=>{it('contains the required availability notice',()=>{expect(DEFAULT_REPLY).toContain('Shadab is currently unavailable');expect(DEFAULT_REPLY).toContain('message has been received')})});

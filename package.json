@@ -1,0 +1,22 @@
+{
+  "name": "shadab-ai-personal-assistant",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev --name init",
+    "db:seed": "tsx prisma/seed.ts",
+    "setup": "tsx scripts/setup.ts"
+  },
+  "dependencies": { "@prisma/client": "^6.7.0", "bcryptjs": "^3.0.2", "next": "^15.3.0", "react": "^19.1.0", "react-dom": "^19.1.0", "zod": "^3.24.3" },
+  "devDependencies": { "@playwright/test": "^1.51.1", "@types/node": "^22.13.10", "@types/react": "^19.0.10", "@types/react-dom": "^19.0.4", "eslint": "^9.22.0", "eslint-config-next": "^15.3.0", "prisma": "^6.7.0", "tsx": "^4.19.3", "typescript": "^5.8.2", "vitest": "^3.0.8" }
+}
